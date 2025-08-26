@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36301.6 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPF-Photo-Manager", "WPF-Photo-Manager\WPF-Photo-Manager.csproj", "{1081D572-026C-4B47-8139-4464891C3D14}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1081D572-026C-4B47-8139-4464891C3D14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1081D572-026C-4B47-8139-4464891C3D14}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1081D572-026C-4B47-8139-4464891C3D14}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1081D572-026C-4B47-8139-4464891C3D14}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0BB4AD6D-DF68-4218-AA32-A059A397ABA2}
+	EndGlobalSection
+EndGlobal
