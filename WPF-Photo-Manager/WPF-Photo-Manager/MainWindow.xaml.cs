@@ -8,6 +8,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WPF_Photo_Manager.ViewModels;
 
 namespace WPF_Photo_Manager
 {
@@ -19,6 +20,8 @@ namespace WPF_Photo_Manager
         public MainWindow()
         {
             InitializeComponent();
+
+            this.DataContext = new GalleryViewModel();
         }
     }
 }
