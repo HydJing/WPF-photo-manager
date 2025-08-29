@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using WPF_Photo_Manager.Services;
+
 
 namespace WPF_Photo_Manager.ViewModels
 {
@@ -63,18 +61,25 @@ namespace WPF_Photo_Manager.ViewModels
             try
             {
                 // The directory path is hardcoded. You should change this to a valid path on your system.
+                // For example: @"C:\Users\YourUsername\Pictures"
                 string directoryPath = @"E:\test images";
 
                 var photos = await _fileService.GetPhotosAsync(directoryPath);
 
-                foreach (var photo in photos)
+                // IMPORTANT: Use the Dispatcher to update the collection in a single batch.
+                Application.Current.Dispatcher.Invoke(() =>
                 {
-                    // Use the Dispatcher to ensure the UI collection is updated on the UI thread.
-                    Application.Current.Dispatcher.Invoke(() =>
+                    // Convert the list of photos to a list of PhotoViewModels
+                    var photoViewModels = photos.Select(p => new PhotoViewModel(p));
+
+                    // Add all items at once by clearing the collection and adding the new ones
+                    // This is more efficient than adding one by one in a loop
+                    Photos.Clear();
+                    foreach (var photoVm in photoViewModels)
                     {
-                        Photos.Add(new PhotoViewModel(photo));
-                    });
-                }
+                        Photos.Add(photoVm);
+                    }
+                });
             }
             catch (Exception ex)
             {

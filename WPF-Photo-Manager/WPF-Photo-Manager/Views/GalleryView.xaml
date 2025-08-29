@@ -3,58 +3,76 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:viewModels="clr-namespace:WPF_Photo_Manager.ViewModels"
              xmlns:converters="clr-namespace:WPF_Photo_Manager.Converters"
+             xmlns:viewmodels="clr-namespace:WPF_Photo_Manager.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <d:UserControl.DataContext>
-        <viewModels:GalleryViewModel />
-    </d:UserControl.DataContext>
+             d:DesignHeight="450" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance Type=viewmodels:GalleryViewModel, IsDesignTimeCreatable=True}">
 
     <UserControl.Resources>
+        <!-- The converter needed to show or hide the "Loading photos..." text. -->
         <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        <Style x:Key="PhotoItemStyle" TargetType="Border">
-            <Setter Property="Background" Value="White" />
-            <Setter Property="BorderBrush" Value="#E0E0E0" />
-            <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="CornerRadius" Value="5" />
-            <Setter Property="Padding" Value="5" />
-            <Setter Property="Margin" Value="5" />
-        </Style>
     </UserControl.Resources>
 
     <Grid>
-        <!-- The main gallery ItemsControl -->
-        <ItemsControl ItemsSource="{Binding Photos}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel Orientation="Horizontal" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Border Style="{StaticResource PhotoItemStyle}">
-                        <StackPanel Width="200"
-                                    Height="220"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center">
-                            <Image Source="{Binding Thumbnail}"
-                                   Width="200"
-                                   Height="200"
-                                   Stretch="UniformToFill" />
-                            <TextBlock Text="{Binding FileName}"
-                                       HorizontalAlignment="Center"
-                                       TextTrimming="CharacterEllipsis"
-                                       ToolTip="{Binding FileName}"
-                                       FontWeight="SemiBold"
-                                       Margin="0,5,0,0" />
-                        </StackPanel>
-                    </Border>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
 
-        <!-- Loading indicator overlay -->
+            <!--
+            ItemsControl: The control that displays a collection of items.
+            ItemsSource: This is the critical binding. It tells the ItemsControl to use the
+                         'Photos' property from your GalleryViewModel as its data source.
+            -->
+            <ItemsControl ItemsSource="{Binding Photos}">
+
+                <!--
+                ItemsPanelTemplate: This defines how the items in the ItemsControl are laid out.
+                We use a WrapPanel to create a fluid, wrapping grid layout.
+                -->
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <!--
+                ItemTemplate: This is the blueprint for how each individual item (a PhotoViewModel)
+                              should be displayed. If this template is missing or incorrect, nothing
+                              will be rendered.
+                -->
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="{x:Type viewmodels:PhotoViewModel}">
+                        <Border BorderBrush="#CCCCCC" BorderThickness="1" Margin="5" Padding="5"
+                                Background="White" CornerRadius="5">
+                            <Border.Effect>
+                                <DropShadowEffect Color="Gray" ShadowDepth="2" Opacity="0.5" />
+                            </Border.Effect>
+                            <StackPanel>
+                                <!--
+                                Image Source: This is the most important binding for your issue.
+                                The path "Thumbnail" tells the Image control to get its source
+                                from the 'Thumbnail' property of the current PhotoViewModel.
+                                Since you confirmed the BitmapImage is not null, this binding
+                                should successfully find the image data.
+                                -->
+                                <Image Source="{Binding Thumbnail}" 
+                                       Width="200" 
+                                       Height="200" 
+                                       Stretch="UniformToFill" />
+
+                                <!-- TextBlock: Binds to the photo's name. -->
+                                <TextBlock Text="{Binding Name}" 
+                                           HorizontalAlignment="Center"
+                                           TextTrimming="CharacterEllipsis"
+                                           Margin="0,5,0,0"
+                                           FontWeight="Bold" />
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <!-- The "Loading" text block, visible only when IsLoading is true. -->
         <TextBlock Text="Loading photos..."
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
